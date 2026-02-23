@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const axios = require('axios');
 require('dotenv').config();
-const db = require('./config/db');
 
 const authRoutes = require('./routes/authRoutes');
 
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Agroshop backend is running');
+  res.send('Agroshop Backend Running');
 });
 
 const PORT = process.env.PORT || 5000;

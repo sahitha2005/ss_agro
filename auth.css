@@ -1,89 +1,106 @@
+/* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Background */
 body {
-  height: 100vh;
+  min-height: 100vh;
+  background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj-YjdpfDf9IFevI-XeJkSau-UZQpVb2OJFuPTHNsslor97b9LIo8CyRJXiSmuar_yRNh_wDnxRVx5pyFQHeB2&s&ec=121528429") no-repeat center center / cover;
   display: flex;
-  justify-content: center;
   align-items: center;
-
-  /* Background image using URL */
-  background-image: url("https://cdn.create.vista.com/api/media/small/20087015/stock-photo-sunlit-young-corn-plants");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  justify-content: center;
 }
 
-
-.container {
-  background: #fff;
-  padding: 30px;
-  width: 350px;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+/* Main Card */
+.auth-box {
+  width: 380px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px 28px;
+  border-radius: 12px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
-.container h2 {
+/* Heading */
+.auth-box h2 {
   text-align: center;
-  margin-bottom: 20px;
-  color: #2c3e50;
+  margin-bottom: 25px;
+  color: #1f7a1f;
+  font-weight: 600;
 }
 
-.input-box {
-  position: relative;
-  margin-bottom: 15px;
-}
-
-.input-box input {
+/* Input Fields */
+.auth-box input {
   width: 100%;
-  padding: 10px 40px 10px 10px;
-  border-radius: 5px;
+  padding: 12px 14px;
+  margin-bottom: 15px;
   border: 1px solid #ccc;
+  border-radius: 6px;
   font-size: 14px;
+  transition: border-color 0.3s;
 }
 
-.input-box span {
+.auth-box input:focus {
+  outline: none;
+  border-color: #2e8b57;
+}
+
+/* Password Box */
+.password-box {
+  position: relative;
+}
+
+.password-box span {
   position: absolute;
-  right: 10px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  font-size: 18px;
-  color: #555;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background: #27ae60;
-  border: none;
-  color: white;
   font-size: 16px;
-  border-radius: 5px;
+}
+
+/* Button */
+.auth-box button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #2e8b57, #1f7a1f);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-button:hover {
-  background: #219150;
+.auth-box button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(0, 128, 0, 0.3);
 }
 
-.link {
-  text-align: center;
-  margin-top: 15px;
-}
-
-.link a {
-  text-decoration: none;
-  color: #27ae60;
-  font-weight: bold;
-}
-
+/* Message Text */
 #msg {
-  text-align: center;
   margin-top: 10px;
-  color: red;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Login Link */
+.auth-box p {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.auth-box a {
+  color: #1f7a1f;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-box a:hover {
+  text-decoration: underline;
 }
