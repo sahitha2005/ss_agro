@@ -1,19 +1,42 @@
-let vegetablesData = [];
+let vegetables = [];
+let originalVegetables = [];
 let isTelugu = false;
 
-// 🔓 Logout
+/* ===========================
+   LOGOUT
+=========================== */
 document.getElementById("logoutBtn").addEventListener("click", () => {
     window.location.href = "login.html";
 });
 
-// 🌱 Load vegetables
-async function loadVegetables() {
-    const response = await fetch("http://localhost:5000/api/vegetables");
-    vegetablesData = await response.json();
-    renderVegetables(vegetablesData);
+
+/* ===========================
+   FETCH VEGETABLES
+=========================== */
+async function fetchVegetables() {
+    try {
+        const response = await fetch("http://localhost:5000/api/vegetables");
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch vegetables");
+        }
+
+        vegetables = await response.json();
+
+        // Store original copy for toggling back
+        originalVegetables = JSON.parse(JSON.stringify(vegetables));
+
+        renderVegetables(vegetables);
+
+    } catch (error) {
+        console.error("Error loading vegetables:", error);
+    }
 }
 
-// 🖥️ Render function
+
+/* ===========================
+   RENDER FUNCTION (ZIGZAG)
+=========================== */
 function renderVegetables(data) {
 
     const container = document.getElementById("vegContainer");
@@ -34,9 +57,17 @@ function renderVegetables(data) {
             </div>
 
             <div class="veg-details">
-                <h3>${veg.name}</h3>
+                <h2>${veg.name}</h2>
                 <p>${veg.description}</p>
-                <p class="price">Price: ${veg.price}</p>
+
+                <div class="veg-info">
+                    <span><strong>Country:</strong> ${veg.country}</span>
+                    <span><strong>Season:</strong> ${veg.season}</span>
+                    <span><strong>Duration:</strong> ${veg.duration}</span>
+                </div>
+
+                <p class="price">₹ ${veg.price}</p>
+
                 <button class="view-btn" onclick="viewDetails(${veg.id})">
                     View Details
                 </button>
@@ -47,44 +78,73 @@ function renderVegetables(data) {
     });
 }
 
-// 🌍 Translate button
+
+/* ===========================
+   TRANSLATION (SAFE VERSION)
+=========================== */
 document.getElementById("translateBtn").addEventListener("click", async () => {
 
     if (!isTelugu) {
 
-        for (let veg of vegetablesData) {
+        try {
+
+            // Combine all vegetables into one string
+            const combinedText = vegetables.map(v =>
+                `${v.name}|||${v.description}|||${v.country}|||${v.season}|||${v.duration}`
+            ).join("###");
 
             const response = await fetch("http://localhost:5000/api/translate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    text: veg.name + ". " + veg.description
-                })
+                body: JSON.stringify({ text: combinedText })
             });
 
             const data = await response.json();
 
-            const translatedParts = data.translatedText.split(".");
-            veg.name = translatedParts[0];
-            veg.description = translatedParts[1] || "";
+            if (data.translatedText) {
+
+                const translatedItems = data.translatedText.split("###");
+
+                translatedItems.forEach((item, index) => {
+
+                    const parts = item.split("|||");
+
+                    vegetables[index].name = parts[0] || vegetables[index].name;
+                    vegetables[index].description = parts[1] || vegetables[index].description;
+                    vegetables[index].country = parts[2] || vegetables[index].country;
+                    vegetables[index].season = parts[3] || vegetables[index].season;
+                    vegetables[index].duration = parts[4] || vegetables[index].duration;
+                });
+
+                renderVegetables(vegetables);
+
+                document.getElementById("translateBtn").innerText = "English";
+                isTelugu = true;
+            }
+
+        } catch (error) {
+            console.error("Translation failed:", error);
         }
-
-        renderVegetables(vegetablesData);
-
-        document.getElementById("translateBtn").innerText = "English";
-        isTelugu = true;
 
     } else {
 
-        loadVegetables(); // reload original English
+        vegetables = JSON.parse(JSON.stringify(originalVegetables));
+        renderVegetables(vegetables);
+
         document.getElementById("translateBtn").innerText = "తెలుగు";
         isTelugu = false;
     }
 });
 
-// 🔍 View details
+/* ===========================
+   VIEW DETAILS
+=========================== */
 function viewDetails(id) {
     window.location.href = `details.html?id=${id}`;
 }
 
-loadVegetables();
+
+/* ===========================
+   INITIAL LOAD
+=========================== */
+fetchVegetables();
