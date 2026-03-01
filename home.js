@@ -144,7 +144,7 @@ document.getElementById("translateBtn").addEventListener("click", () => {
    VIEW DETAILS
 =========================== */
 function viewDetails(id) {
-    window.location.href = `details.html?id=${id}`;
+    window.location.href = `details.html?id=${id}&lang=${currentLang}`;
 }
 
 /* ===========================
