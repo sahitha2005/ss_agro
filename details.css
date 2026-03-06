@@ -1,51 +1,51 @@
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #d4fc79, #96e6a1);
-    margin: 0;
-    padding: 0;
+body{
+font-family: Arial;
+margin:0;
+background:linear-gradient(to right,#c7e3c2,#9ec49c);
 }
 
-.container {
-    width: 90%;
-    max-width: 600px;
-    margin: 60px auto;
-    text-align: center;
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
 }
 
-h1 {
-    color: #2c3e50;
-    margin-bottom: 30px;
+.buttons button{
+padding:10px 18px;
+margin-left:10px;
+background:#2e7d32;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
 }
 
-.details-card {
-    background-color: #ffffff;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: left;
+.card{
+
+width:400px;
+background:white;
+margin:80px auto;
+padding:30px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 5px 20px rgba(0,0,0,0.2);
+
 }
 
-.details-card p {
-    font-size: 18px;
-    margin: 15px 0;
+.card img{
+width:200px;
+height:200px;
+object-fit:cover;
 }
 
-.details-card strong {
-    color: #2c3e50;
-}
+.fertBtn{
 
-.back-btn {
-    margin-top: 25px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #27ae60;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
+background:#4caf50;
+border:none;
+padding:12px 20px;
+color:white;
+border-radius:8px;
+cursor:pointer;
 
-.back-btn:hover {
-    background-color: #1e8449;
 }

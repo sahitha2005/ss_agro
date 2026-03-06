@@ -1,5 +1,7 @@
 let vegetables = [];
 let currentLang = "en";
+const params = new URLSearchParams(window.location.search);
+currentLang = params.get("lang") || "en";
 
 /* ===========================
    LOGOUT

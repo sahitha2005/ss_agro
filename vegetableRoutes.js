@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/db');
+
+const vegetableController = require('../controllers/vegetableController');
+
+/* ============================
+   ROUTES
+============================ */
 
 // Get all vegetables
-router.get('/', (req, res) => {
-  const sql = 'SELECT * FROM vegetables';
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json(err);
-    }
-    res.json(results);
-  });
-});
+router.get('/', vegetableController.getAllVegetables);
+
+// Get vegetable details by vegetable_id
+router.get('/vegetable-details/:id', vegetableController.getVegetableDetails);
 
 module.exports = router;

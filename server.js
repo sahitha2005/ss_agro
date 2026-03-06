@@ -2,11 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 require('dotenv').config();
+const app = express();
 
 const authRoutes = require('./routes/authRoutes');
 const db = require('./config/db');
+const detailsRoutes = require("./routes/detailsRoutes");
 
-const app = express();
+app.use("/api/details", detailsRoutes);
+
+
 
 app.use(cors());
 app.use(express.json());
@@ -31,6 +35,43 @@ app.get('/api/vegetables', (req, res) => {
     }
 
     res.json(results);
+  });
+
+});
+
+
+/* ===========================
+   3RD MODULE - GET VEGETABLE DETAILS
+=========================== */
+app.get('/api/vegetable-details/:id', (req, res) => {
+
+  const vegId = req.params.id;
+
+  const sql = `
+    SELECT 
+      soil_type,
+      soil_type_te,
+      season,
+      season_te,
+      market_price,
+      seed_price
+    FROM vegetable_details
+    WHERE vegetable_id = ?
+  `;
+
+  db.query(sql, [vegId], (err, results) => {
+
+    if (err) {
+      console.log("Database error:", err);
+      return res.status(500).json({ message: "Database error" });
+    }
+
+    if (results.length === 0) {
+      return res.json({ message: "No details found" });
+    }
+
+    res.json(results[0]);
+
   });
 
 });
