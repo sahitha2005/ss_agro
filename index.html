@@ -2,21 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AgroShop Portal</title>
-    <link rel="stylesheet" href="css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Exotic Veggies</title>
+    <link rel="stylesheet" href="../css/main.css">
 </head>
+<body>
+    <header>
+        <h1>Exotic VegStore</h1>
+        <nav>
+            <span id="welcomeMessage"></span>
+            <div id="google_translate_element"></div>
+            <button id="adminBtn" class="admin-btn hidden">Admin Panel</button>
+            <button id="logoutBtn" class="logout-btn">Logout</button>
+        </nav>
+    </header>
+    
+    <main>
+        <h2 class="section-title">Fresh Arrivals</h2>
+        <!-- The grid where our JavaScript will inject the vegetable cards -->
+        <div class="veg-grid" id="vegGrid">
+            <p>Loading exotic vegetables...</p>
+        </div>
+    </main>
 
+    <script src="../js/home.js"></script>
 
-    <body>
-
-    <div class="top-right-buttons">
-        <button id="userBtn">User Login</button>
-        <button id="adminBtn">Admin Login</button>
-    </div>
-
-    <script src="js/index.js"></script>
-
+   
+    <script src="../js/translator.js"></script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
 </body>
 
-    
 </html>

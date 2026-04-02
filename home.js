@@ -1,158 +1,79 @@
-let vegetables = [];
-let currentLang = "en";
-const params = new URLSearchParams(window.location.search);
-currentLang = params.get("lang") || "en";
-
-/* ===========================
-   LOGOUT
-=========================== */
-document.getElementById("logoutBtn").addEventListener("click", () => {
-    window.location.href = "login.html";
-});
-
-/* ===========================
-   UI TRANSLATIONS
-=========================== */
-const translations = {
-    en: {
-        heroTitle: "Exotic Foreign Vegetables Grown in India",
-        heroSubtitle: "Fresh • Organic • Premium Quality",
-        footer: "© 2026 AgroShop. All Rights Reserved.",
-        logout: "Logout",
-        translateBtn: "తెలుగు",
-        country: "Country",
-        season: "Season",
-        duration: "Duration",
-        viewDetails: "View Details"
-    },
-    te: {
-        heroTitle: "భారతదేశంలో పెరిగిన విదేశీ కూరగాయలు",
-        heroSubtitle: "తాజా • సేంద్రీయ • ప్రీమియం నాణ్యత",
-        footer: "© 2026 అగ్రోషాప్. అన్ని హక్కులు రిజర్వ్ చేయబడ్డాయి.",
-        logout: "లాగౌట్",
-        translateBtn: "English",
-        country: "దేశం",
-        season: "కాలం",
-        duration: "వ్యవధి",
-        viewDetails: "వివరాలు చూడండి"
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Authentication Check
+    // If the user isn't stored in localStorage, kick them back to the login page
+    const userString = localStorage.getItem('user');
+    if (!userString) {
+        window.location.href = 'auth.html';
+        return;
     }
-};
 
-/* ===========================
-   UPDATE STATIC UI
-=========================== */
-function updateUI() {
+    const user = JSON.parse(userString);
+    document.getElementById('welcomeMessage').textContent = `Hello, ${user.username}!`;
 
-    document.getElementById("heroTitle").innerText =
-        translations[currentLang].heroTitle;
-
-    document.getElementById("heroSubtitle").innerText =
-        translations[currentLang].heroSubtitle;
-
-    document.getElementById("footerText").innerText =
-        translations[currentLang].footer;
-
-    document.getElementById("logoutBtn").innerText =
-        translations[currentLang].logout;
-
-    document.getElementById("translateBtn").innerText =
-        translations[currentLang].translateBtn;
-}
-
-/* ===========================
-   FETCH VEGETABLES
-=========================== */
-async function fetchVegetables() {
-    try {
-
-        const response = await fetch("http://localhost:5000/api/vegetables");
-
-        if (!response.ok) {
-            throw new Error("Failed to fetch vegetables");
-        }
-
-        vegetables = await response.json();
-
-        renderVegetables();
-
-    } catch (error) {
-        console.error("Error loading vegetables:", error);
+    // NEW: Check role and display Admin button if applicable
+    const adminBtn = document.getElementById('adminBtn');
+    if (user.role === 'admin') {
+        adminBtn.classList.remove('hidden'); // Make the button visible
+        adminBtn.addEventListener('click', () => {
+            window.location.href = 'admin.html';
+        });
     }
-}
-
-/* ===========================
-   RENDER VEGETABLES
-=========================== */
-function renderVegetables() {
-
-    const container = document.getElementById("vegContainer");
-    container.innerHTML = "";
-
-    vegetables.forEach((veg, index) => {
-
-        const row = document.createElement("div");
-        row.classList.add("veg-row");
-
-        if (index % 2 !== 0) {
-            row.classList.add("reverse");
-        }
-
-        // Language selection
-        const name = currentLang === "en" ? veg.name : veg.name_te;
-        const description = currentLang === "en" ? veg.description : veg.description_te;
-        const country = currentLang === "en" ? veg.country : veg.country_te;
-        const season = currentLang === "en" ? veg.season : veg.season_te;
-        const duration = currentLang === "en" ? veg.duration : veg.duration_te;
-
-        row.innerHTML = `
-            <div class="veg-image">
-                <img src="${veg.image_url}" alt="${name}">
-            </div>
-
-            <div class="veg-details">
-                <h2>${name}</h2>
-                <p>${description}</p>
-
-                <div class="veg-info">
-                    <span><strong>${translations[currentLang].country}:</strong> ${country}</span>
-                    <span><strong>${translations[currentLang].season}:</strong> ${season}</span>
-                    <span><strong>${translations[currentLang].duration}:</strong> ${duration}</span>
-                </div>
-
-                <p class="price">₹ ${veg.price}</p>
-
-                <button class="view-btn" onclick="viewDetails(${veg.id})">
-                    ${translations[currentLang].viewDetails}
-                </button>
-            </div>
-        `;
-
-        container.appendChild(row);
+    // 2. Handle Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('user');
+        window.location.href = 'auth.html';
     });
-}
 
-/* ===========================
-   LANGUAGE TOGGLE
-=========================== */
-document.getElementById("translateBtn").addEventListener("click", () => {
+    // 3. Fetch and Display Vegetables
+    const grid = document.getElementById('vegGrid');
+    
+    try {
+        const response = await fetch('http://localhost:3000/api/veg');
+        
+        // Ensure the API actually returned a success response
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const vegetables = await response.json();
 
-    currentLang = currentLang === "en" ? "te" : "en";
+        // Clear the "Loading..." text
+        grid.innerHTML = '';
 
-    updateUI();
-    renderVegetables();  // re-render using Telugu fields
+        if (vegetables.length === 0) {
+            grid.innerHTML = '<p>No vegetables found in the database.</p>';
+            return;
+        }
+
+        // Loop through the database results and create a card for each
+        vegetables.forEach(veg => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            // Build the card HTML (Notice the inline onclick is removed)
+            card.innerHTML = `
+                <img src="${veg.image_url}" alt="${veg.name}">
+                <div class="card-info">
+                    <div>
+                        <div class="card-title">${veg.name}</div>
+                        <div class="card-price">$${parseFloat(veg.price).toFixed(2)}</div>
+                    </div>
+                    <button class="view-btn">View Details</button>
+                </div>
+            `;
+            
+            // 4. Navigation to Details Page (Modern Approach)
+            // Attach the click event directly to this specific card's button
+            const viewBtn = card.querySelector('.view-btn');
+            viewBtn.addEventListener('click', () => {
+                window.location.href = `details.html?id=${veg.veg_id}`;
+            });
+
+            // Add the card to the grid
+            grid.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Error fetching vegetables:', error);
+        grid.innerHTML = '<p style="color:red;">Failed to load vegetables from the server.</p>';
+    }
 });
-
-/* ===========================
-   VIEW DETAILS
-=========================== */
-function viewDetails(id) {
-    window.location.href = `details.html?id=${id}&lang=${currentLang}`;
-}
-
-/* ===========================
-   INITIAL LOAD
-=========================== */
-window.onload = function () {
-    updateUI();
-    fetchVegetables();
-};

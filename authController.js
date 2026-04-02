@@ -1,52 +1,57 @@
-const User = require('../models/userModel');
+const db = require('../config/db');
+const bcrypt = require('bcrypt');
 
-// REGISTER
-exports.register = (req, res) => {
-  const { name, email, password } = req.body;
+// SIGNUP LOGIC
+exports.signup = async (req, res) => {
+    const { username, email, password } = req.body;
 
-  if (!name || !email || !password) {
-    return res.status(400).json({ message: 'All fields are required' });
-  }
+    try {
+        // Hash the password for security
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        // Insert into database
+        const query = 'INSERT INTO users (email, username, password) VALUES (?, ?, ?)';
+        await db.execute(query, [email, username, hashedPassword]);
+        
+        res.status(201).json({ message: 'User registered successfully!' });
+        } catch (error) {
+        // ADD THIS LINE: Print the exact error to your terminal
+        console.error("Exact MySQL Error: ", error); 
 
-  if (password.length < 8) {
-    return res.status(400).json({
-      message: 'Password must be at least 8 characters'
-    });
-  }
-
-  User.findUserByEmail(email, (err, result) => {
-    if (err) return res.status(500).json({ message: 'DB error' });
-
-    if (result.length > 0) {
-      return res.status(400).json({ message: 'Email already exists' });
+        if (error.code === 'ER_DUP_ENTRY') {
+            res.status(400).json({ error: 'Email already exists!' });
+        } else {
+            res.status(500).json({ error: 'Database error' });
+        }
     }
 
-    User.createUser({ name, email, password }, (err) => {
-      if (err) return res.status(500).json({ message: 'Registration failed' });
-
-      res.json({ message: 'User registered successfully' });
-    });
-  });
 };
 
-// LOGIN
-exports.login = (req, res) => {
-  const { email, password } = req.body;
+// LOGIN LOGIC
+exports.login = async (req, res) => {
+    const { email, password } = req.body;
 
-  User.findUserByEmail(email, (err, result) => {
-    if (err) return res.status(500).json({ message: 'DB error' });
+    try {
+        const query = 'SELECT * FROM users WHERE email = ?';
+        const [rows] = await db.execute(query, [email]);
 
-    if (result.length === 0) {
-      return res.status(400).json({ message: 'User not found' });
+        if (rows.length === 0) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
+
+        const user = rows[0];
+        // Compare entered password with hashed password in DB
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
+
+        res.status(200).json({ 
+            message: 'Login successful!', 
+            user: { email: user.email, username: user.username, role: user.role } 
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Database error' });
     }
-
-    if (result[0].password !== password) {
-      return res.status(400).json({ message: 'Invalid password' });
-    }
-
-    res.json({
-      message: 'Login successful',
-      user: result[0].name
-    });
-  });
 };

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Exotic VegStore</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/buynow.css">
+</head>
+<body>
+    <header>
+        <h1>Exotic VegStore</h1>
+        <nav>
+            <div id="google_translate_element"></div>
+            <a href="javascript:history.back()" style="color: white; text-decoration: none; font-weight: bold;">&larr; Back to Details</a>
+        </nav>
+    </header>
+    
+    <main class="checkout-container">
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            <div id="loadingSummary">Loading item details...</div>
+            <div id="itemDetails" class="hidden">
+                <img id="summaryImage" src="" alt="Vegetable">
+                <h3 id="summaryName"></h3>
+                <p>Price per unit: <span id="summaryPrice"></span></p>
+                <h3 class="total-display">Total: $<span id="calculatedTotal">0.00</span></h3>
+            </div>
+        </div>
+
+        <div class="checkout-form-container">
+            <h2>Shipping Details</h2>
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label for="buyerName">Full Name</label>
+                    <input type="text" id="buyerName" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number (with Country Code)</label>
+                    <input type="tel" id="phoneNumber" required placeholder="+919876543210">
+                    <small style="color: #666; font-size: 12px;">Format: +[CountryCode][Number] (e.g., +91 for India)</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="shippingAddress">Shipping Address</label>
+                    <textarea id="shippingAddress" rows="3" required placeholder="123 Farm Lane..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" id="quantity" value="1" min="1" max="100" required>
+                </div>
+
+                <button type="submit" id="submitOrderBtn" class="btn-checkout">Confirm Purchase</button>
+                <p id="checkoutMessage" class="message"></p>
+            </form>
+        </div>
+    </main>
+
+    <script src="../js/buynow.js"></script>
+
+
+    <script src="../js/translator.js"></script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>

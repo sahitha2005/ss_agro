@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Exotic VegStore</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <header>
+        <h1>Exotic VegStore - Admin Panel</h1>
+        <nav>
+            <div id="google_translate_element"></div>
+            <a href="index.html" style="color: white; text-decoration: none; margin-right: 20px;">Storefront</a>
+            <button id="logoutBtn" class="logout-btn">Logout</button>
+        </nav>
+    </header>
+    
+    <main class="admin-container">
+        <!-- Orders Section -->
+        <h2>Manage Customer Orders</h2>
+        <div class="table-wrapper">
+            <table id="ordersTable">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Buyer Name</th>
+                        <th>Email</th>
+                        <th>Vegetable</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                        <th>Shipping Address</th>
+                        <th>Actions</th> <!-- Added Actions Column -->
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                    <tr>
+                        <td colspan="9" style="text-align: center;">Loading orders...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Inventory Section -->
+        <h2 style="margin-top: 50px;">Manage Inventory & Fertilizers</h2>
+        <div class="table-wrapper">
+            <table id="inventoryTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="inventoryTableBody">
+                    <tr>
+                        <td colspan="5" style="text-align: center;">Loading inventory...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Edit Vegetable Modal -->
+        <div id="editModal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-btn" id="closeModal">&times;</span>
+                <h3>Edit Vegetable</h3>
+                <form id="editForm">
+                    <input type="hidden" id="editVegId">
+                    <div style="margin-bottom: 15px;">
+                        <label>Name:</label><br>
+                        <input type="text" id="editVegName" required style="width: 100%; padding: 8px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label>Price ($):</label><br>
+                        <input type="number" step="0.01" id="editVegPrice" required style="width: 100%; padding: 8px;">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label>Image URL:</label><br>
+                        <input type="text" id="editVegImage" required style="width: 100%; padding: 8px;">
+                    </div>
+                    <button type="submit" style="background: #2e7d32; color: white; padding: 10px; width: 100%;">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- NEW: Edit Fertilizer Modal -->
+        <div id="fertModal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-btn" id="closeFertModal">&times;</span>
+                <h3>Edit Fertilizer Details</h3>
+                <form id="fertForm">
+                    <input type="hidden" id="editFertVegId">
+                    <div style="margin-bottom: 15px;">
+                        <label>Fertilizer Name:</label><br>
+                        <input type="text" id="editFertName" required style="width: 100%; padding: 8px;">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label>Instructions:</label><br>
+                        <textarea id="editFertInstructions" rows="4" required style="width: 100%; padding: 8px;"></textarea>
+                    </div>
+                    <button type="submit" style="background: #1565c0; color: white; padding: 10px; width: 100%;">Save Fertilizer</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/admin.js"></script>
+
+
+    <script src="../js/translator.js"></script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>

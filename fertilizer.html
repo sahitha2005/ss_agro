@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fertilizer Guide - Exotic VegStore</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/fertilizer.css">
+</head>
+<body>
+    <header>
+        <h1>Exotic VegStore</h1>
+        <nav>
+            <div id="google_translate_element"></div>
+            <a href="javascript:history.back()" style="color: white; text-decoration: none; font-weight: bold;">&larr; Back to Details</a>
+        </nav>
+    </header>
+    
+    <main class="fert-container">
+        <div id="loadingMsg" class="loading">Fetching organic data...</div>
+        
+        <div id="fertCard" class="fert-card hidden">
+            <div class="fert-header">
+                <h2>🌿 Organic Fertilizer Guide</h2>
+                <p>Tailored specifically for: <strong id="vegName"></strong></p>
+            </div>
+            
+            <div class="fert-body">
+                <h3 id="fertName"></h3>
+                
+                <div class="instructions-box">
+                    <h4>📋 Application Instructions</h4>
+                    <p id="fertInstructions"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/fertilizer.js"></script>
+
+
+    <script src="../js/translator.js"></script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>
